@@ -12,20 +12,19 @@ const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
 // Geolocation Api
 if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function (position) {
-        const { latitude } = position.coords;
-        const { longitude } = position.coords;
-        const coords = [latitude,longitude]
-        const map = L.map('map').setView(coords, 13);
+    navigator.geolocation.getCurrentPosition((position) => {
+        const {latitude} = position.coords;
+        const {longitude} = position.coords;
+        const coordinates = [latitude,longitude];
+        // Leaflet library entry point
+        const map = L.map('map').setView(coordinates,13);
+        console.log(map);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar', attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
+        L.marker(coordinates).addTo(map);
+        
 
-        L.tileLayer('https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
-        L.marker(coords).addTo(map)
-            .bindPopup('A pretty CSS popup.<br> Easily customizable.')
-            .openPopup();
-    }, function () {
-        alert("sorry couldn't get your current position");
-    });
+    },
+        () => {
+            alert("Please allow location in browser");
+        })
 }
